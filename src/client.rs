@@ -2,7 +2,8 @@ use crate::errors::Error;
 use crate::header::Header;
 use crate::internal_prelude::*;
 use crate::state::{gen_state_id, ClientState, ConsensusState};
-use commitments::{StateCommitment, UpdateClientCommitment};
+use commitments::{gen_state_id_from_any, StateCommitment, UpdateClientCommitment};
+use core::marker::PhantomData;
 use core::str::FromStr;
 use ethereum_ibc::client_state::ClientState as EthereumClientState;
 use ethereum_ibc::consensus_state::ConsensusState as EthereumConsensusState;
@@ -24,6 +25,116 @@ use light_client::{
 };
 use tiny_keccak::Keccak;
 use validation_context::ValidationParams;
+
+pub struct ELCIBCAdaptor<CLS, COS>
+where
+    CLS: Ics02ClientState,
+    COS: Ics02ConsensusState,
+{
+    marker: PhantomData<(CLS, COS)>,
+}
+
+pub trait CanonicalClientState {
+    fn as_canonical_state(&self) -> Self;
+}
+
+pub trait CanonicalConsensusState {
+    fn as_canonical_state(&self) -> Self;
+}
+
+impl<CLS, COS> LightClient for ELCIBCAdaptor<CLS, COS>
+where
+    CLS: Ics02ClientState
+        + TryFrom<Any, Error = Error>
+        + TryInto<Any, Error = Error>
+        + CanonicalClientState,
+    COS: Ics02ConsensusState
+        + TryFrom<Any, Error = Error>
+        + TryInto<Any, Error = Error>
+        + CanonicalConsensusState,
+{
+    fn client_type(&self) -> String {
+        todo!()
+    }
+
+    fn latest_height(
+        &self,
+        ctx: &dyn HostClientReader,
+        client_id: &ClientId,
+    ) -> Result<Height, light_client::Error> {
+        let client_state: CLS = ctx.client_state(client_id)?.try_into()?;
+        Ok(client_state.latest_height().into())
+    }
+
+    fn create_client(
+        &self,
+        _: &dyn HostClientReader,
+        any_client_state: Any,
+        any_consensus_state: Any,
+    ) -> Result<CreateClientResult, light_client::Error> {
+        let client_state: CLS = any_client_state.clone().try_into()?;
+        let consensus_state: COS = any_consensus_state.clone().try_into()?;
+
+        let _ = client_state
+            .initialise(any_consensus_state.clone().into())
+            .map_err(Error::ICS02)?;
+
+        let height = client_state.latest_height().into();
+        let timestamp: Time = consensus_state.timestamp().into();
+        let state_id = gen_state_id_from_any(
+            &client_state.as_canonical_state().try_into()?,
+            &consensus_state.as_canonical_state().try_into()?,
+        )
+        .unwrap();
+        Ok(CreateClientResult {
+            height,
+            commitment: UpdateClientCommitment {
+                prev_state_id: None,
+                new_state_id: state_id,
+                new_state: Some(any_client_state.into()),
+                prev_height: None,
+                new_height: height,
+                timestamp,
+                validation_params: ValidationParams::Empty,
+            },
+            prove: false,
+        })
+    }
+
+    fn update_client(
+        &self,
+        ctx: &dyn HostClientReader,
+        client_id: ClientId,
+        any_header: Any,
+    ) -> Result<UpdateClientResult, light_client::Error> {
+        todo!()
+    }
+
+    fn verify_membership(
+        &self,
+        ctx: &dyn HostClientReader,
+        client_id: ClientId,
+        prefix: commitments::CommitmentPrefix,
+        path: String,
+        value: Vec<u8>,
+        proof_height: Height,
+        proof: Vec<u8>,
+    ) -> Result<StateVerificationResult, light_client::Error> {
+        todo!()
+    }
+
+    fn verify_non_membership(
+        &self,
+        ctx: &dyn HostClientReader,
+        client_id: ClientId,
+        prefix: commitments::CommitmentPrefix,
+        path: String,
+        proof_height: Height,
+        proof: Vec<u8>,
+    ) -> Result<StateVerificationResult, light_client::Error> {
+        todo!()
+    }
+}
 
 pub struct EthereumLightClient<const SYNC_COMMITTEE_SIZE: usize>;
 
