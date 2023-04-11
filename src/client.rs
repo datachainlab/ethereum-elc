@@ -26,19 +26,7 @@ use light_client::{
 use tiny_keccak::Keccak;
 use validation_context::ValidationParams;
 
-pub struct ELCIBCAdaptor<CLS, COS>
-where
-    CLS: Ics02ClientState,
-    COS: Ics02ConsensusState,
-{
-    marker: PhantomData<(CLS, COS)>,
-}
-
-pub trait CanonicalState {
-    fn as_canonical_state(&self) -> Self;
-}
-
-impl<CLS, COS> LightClient for ELCIBCAdaptor<CLS, COS>
+pub struct ELCIBCAdaptor<CLS, COS, H>
 where
     CLS: Ics02ClientState
         + CanonicalState
@@ -48,6 +36,30 @@ where
         + CanonicalState
         + TryFrom<Any, Error = Error>
         + TryInto<Any, Error = Error>,
+    H: Ics02Header + TryFrom<Any, Error = Error>,
+{
+    marker: PhantomData<(CLS, COS, H)>,
+}
+
+pub trait CanonicalState {
+    fn as_canonical_state(&self) -> Self;
+}
+
+pub trait TrustedHeight {
+    fn trusted_height(&self) -> Height;
+}
+
+impl<CLS, COS, H> LightClient for ELCIBCAdaptor<CLS, COS, H>
+where
+    CLS: Ics02ClientState
+        + CanonicalState
+        + TryFrom<Any, Error = Error>
+        + TryInto<Any, Error = Error>,
+    COS: Ics02ConsensusState
+        + CanonicalState
+        + TryFrom<Any, Error = Error>
+        + TryInto<Any, Error = Error>,
+    H: Ics02Header + TrustedHeight + TryFrom<Any, Error = Error>,
 {
     fn client_type(&self) -> String {
         todo!()
@@ -77,6 +89,7 @@ where
 
         let height = client_state.latest_height().into();
         let timestamp: Time = consensus_state.timestamp().into();
+        // TODO fix unwrap
         let state_id = gen_state_id_from_any(
             &client_state.as_canonical_state().try_into()?,
             &consensus_state.as_canonical_state().try_into()?,
@@ -103,7 +116,78 @@ where
         client_id: ClientId,
         any_header: Any,
     ) -> Result<UpdateClientResult, light_client::Error> {
-        todo!()
+        let header: H = any_header.clone().try_into()?;
+
+        let client_state: CLS = ctx.client_state(&client_id)?.try_into()?;
+
+        let height = header.height().into();
+        let header_timestamp: Time = header.timestamp().into();
+        let trusted_height = header.trusted_height();
+
+        let trusted_consensus_state: COS = ctx
+            .consensus_state(&client_id, &trusted_height.into())
+            .map_err(|_| {
+                Error::ICS02(ClientError::ConsensusStateNotFound {
+                    client_id: client_id.clone().into(),
+                    height: trusted_height.try_into().unwrap(),
+                })
+            })?
+            .try_into()?;
+
+        // Use client_state to validate the new header against the latest consensus_state.
+        // This function will return the new client_state (its latest_height changed) and a
+        // consensus_state obtained from header. These will be later persisted by the keeper.
+        let UpdatedState {
+            client_state: new_client_state,
+            consensus_state: new_consensus_state,
+        } = client_state
+            .check_header_and_update_state(
+                &IBCContext::<CLS, COS>::new(ctx),
+                client_id.into(),
+                any_header.into(),
+            )
+            .map_err(|e| {
+                Error::ICS02(ClientError::HeaderVerificationFailure {
+                    reason: e.to_string(),
+                })
+            })?;
+
+        let new_client_state = downcast_client_state::<CLS>(new_client_state.as_ref())
+            .unwrap()
+            .clone();
+        let new_consensus_state = downcast_consensus_state::<COS>(new_consensus_state.as_ref())
+            .unwrap()
+            .clone();
+
+        // TODO fix unwrap
+        let prev_state_id = gen_state_id_from_any(
+            &client_state.as_canonical_state().try_into()?,
+            &trusted_consensus_state.as_canonical_state().try_into()?,
+        )
+        .unwrap();
+
+        let any_new_client_state: Any = new_client_state.as_canonical_state().try_into()?;
+        let any_new_consensus_state: Any = new_consensus_state.as_canonical_state().try_into()?;
+
+        let new_state_id =
+            gen_state_id_from_any(&any_new_client_state, &any_new_consensus_state).unwrap();
+
+        Ok(UpdateClientResult {
+            new_any_client_state: any_new_client_state.into(),
+            new_any_consensus_state: any_new_consensus_state.into(),
+            height,
+            commitment: UpdateClientCommitment {
+                prev_state_id: Some(prev_state_id),
+                new_state_id,
+                new_state: None,
+                prev_height: Some(trusted_height.into()),
+                new_height: height,
+                timestamp: header_timestamp,
+                // TODO need any support
+                validation_params: ValidationParams::Empty,
+            },
+            prove: true,
+        })
     }
 
     fn verify_membership(
