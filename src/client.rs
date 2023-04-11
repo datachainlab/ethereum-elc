@@ -34,24 +34,20 @@ where
     marker: PhantomData<(CLS, COS)>,
 }
 
-pub trait CanonicalClientState {
-    fn as_canonical_state(&self) -> Self;
-}
-
-pub trait CanonicalConsensusState {
+pub trait CanonicalState {
     fn as_canonical_state(&self) -> Self;
 }
 
 impl<CLS, COS> LightClient for ELCIBCAdaptor<CLS, COS>
 where
     CLS: Ics02ClientState
+        + CanonicalState
         + TryFrom<Any, Error = Error>
-        + TryInto<Any, Error = Error>
-        + CanonicalClientState,
+        + TryInto<Any, Error = Error>,
     COS: Ics02ConsensusState
+        + CanonicalState
         + TryFrom<Any, Error = Error>
-        + TryInto<Any, Error = Error>
-        + CanonicalConsensusState,
+        + TryInto<Any, Error = Error>,
 {
     fn client_type(&self) -> String {
         todo!()
