@@ -18,5 +18,5 @@ light-client-registry = { git = "https://github.com/datachainlab/lcp", rev = "v0
 commitments = { git = "https://github.com/datachainlab/lcp", rev = "v0.1.1", default-features = false }
 validation-context = { git = "https://github.com/datachainlab/lcp", rev = "v0.1.1", default-features = false }
 
-ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "484253621fc628bdefc2bdf137d5f24a689e8583", default-features = false }
-ethereum-ibc-proto = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "484253621fc628bdefc2bdf137d5f24a689e8583", default-features = false }
+ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "v0.0.2", default-features = false }
+ethereum-ibc-proto = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "v0.0.2", default-features = false }
