@@ -167,12 +167,11 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "commitments"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "flex-error",
  "hex",
  "lcp-types",
- "log",
  "prost",
  "rlp",
  "serde",
@@ -662,7 +661,7 @@ dependencies = [
 [[package]]
 name = "lcp-types"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "flex-error",
  "ibc",
@@ -671,7 +670,6 @@ dependencies = [
  "serde",
  "serde_json",
  "tendermint",
- "tendermint-proto",
 ]
 
 [[package]]
@@ -683,7 +681,7 @@ checksum = "3304a64d199bb964be99741b7a14d26972741915b3649639149b2479bb46f4b5"
 [[package]]
 name = "light-client"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "bincode",
  "commitments",
@@ -692,8 +690,6 @@ dependencies = [
  "ibc",
  "ibc-proto",
  "lcp-types",
- "prost",
- "prost-types",
  "serde",
  "store",
 ]
@@ -701,7 +697,7 @@ dependencies = [
 [[package]]
 name = "light-client-registry"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "flex-error",
  "light-client",
@@ -1226,7 +1222,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "store"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "flex-error",
  "log",
@@ -1505,12 +1501,11 @@ checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
 [[package]]
 name = "validation-context"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.1.4#49e6402e1fa6bc2ea13d0e36f79de3401c8e2037"
+source = "git+https://github.com/datachainlab/lcp?rev=v0.1.5#0df0519401f0aa7031daf13db71bc27051718e09"
 dependencies = [
  "lcp-types",
  "rlp",
  "serde",
- "tendermint-light-client-verifier",
 ]
 
 [[package]]
