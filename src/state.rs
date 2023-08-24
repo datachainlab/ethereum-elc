@@ -1,5 +1,4 @@
 use crate::errors::Error;
-use commitments::{gen_state_id_from_any, StateID};
 use core::ops::Deref;
 use ethereum_ibc::client_state::{
     ClientState as EthereumClientState, ETHEREUM_CLIENT_STATE_TYPE_URL,
@@ -7,8 +6,9 @@ use ethereum_ibc::client_state::{
 use ethereum_ibc::consensus_state::{
     ConsensusState as EthereumConsensusState, ETHEREUM_CONSENSUS_STATE_TYPE_URL,
 };
-use ibc_proto::google::protobuf::Any as IBCAny;
-use lcp_types::Any;
+use light_client::commitments::{gen_state_id_from_any, StateID};
+use light_client::types::proto::google::protobuf::Any as IBCAny;
+use light_client::types::Any;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct ClientState<const SYNC_COMMITTEE_SIZE: usize>(

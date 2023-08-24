@@ -7,7 +7,7 @@ pub enum Error {
     /// ethereum ibc error: `{0}`
     IBC(ethereum_ibc::errors::Error),
     /// lcp commitments error: `{0}`
-    Commitments(commitments::Error),
+    Commitments(light_client::commitments::Error),
     /// ics02 error: `{0}`
     ICS02(ibc::core::ics02_client::error::ClientError),
     /// ics23 error: `{0}`
@@ -20,8 +20,8 @@ pub enum Error {
 
 impl LightClientSpecificError for Error {}
 
-impl From<commitments::Error> for Error {
-    fn from(value: commitments::Error) -> Self {
+impl From<light_client::commitments::Error> for Error {
+    fn from(value: light_client::commitments::Error) -> Self {
         Self::Commitments(value)
     }
 }

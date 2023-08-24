@@ -2,7 +2,6 @@ use crate::errors::Error;
 use crate::header::Header;
 use crate::internal_prelude::*;
 use crate::state::{gen_state_id, ClientState, ConsensusState};
-use commitments::{StateCommitment, UpdateClientCommitment};
 use core::str::FromStr;
 use ethereum_ibc::client_state::ClientState as EthereumClientState;
 use ethereum_ibc::consensus_state::ConsensusState as EthereumConsensusState;
@@ -17,13 +16,13 @@ use ibc::core::ics02_client::error::ClientError;
 use ibc::core::ics02_client::header::Header as Ics02Header;
 use ibc::core::ics23_commitment::commitment::{CommitmentPrefix, CommitmentProofBytes};
 use ibc::core::ics24_host::Path;
-use lcp_types::{Any, ClientId, Height, Time};
+use light_client::commitments::{CommitmentContext, StateCommitment, UpdateClientCommitment};
 use light_client::ibc::IBCContext;
+use light_client::types::{Any, ClientId, Height, Time};
 use light_client::{
     CreateClientResult, HostClientReader, LightClient, StateVerificationResult, UpdateClientResult,
 };
 use tiny_keccak::Keccak;
-use validation_context::ValidationParams;
 
 pub struct EthereumLightClient<const SYNC_COMMITTEE_SIZE: usize>;
 
@@ -66,8 +65,9 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 prev_height: None,
                 new_height: height,
                 timestamp,
-                validation_params: ValidationParams::Empty,
-            },
+                context: CommitmentContext::Empty,
+            }
+            .into(),
             prove: false,
         })
     }
@@ -141,8 +141,9 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 prev_height: Some(trusted_height.into()),
                 new_height: height,
                 timestamp: header_timestamp,
-                validation_params: ValidationParams::Empty,
-            },
+                context: CommitmentContext::Empty,
+            }
+            .into(),
             prove: true,
         })
     }
@@ -186,7 +187,8 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 Some(value),
                 proof_height,
                 gen_state_id(client_state, consensus_state)?,
-            ),
+            )
+            .into(),
         })
     }
 
@@ -221,7 +223,8 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 None,
                 proof_height,
                 gen_state_id(client_state, consensus_state)?,
-            ),
+            )
+            .into(),
         })
     }
 }
