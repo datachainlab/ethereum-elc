@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::result_large_err)]
 
 use client::EthereumLightClient;
 use ethereum_ibc::client_state::ETHEREUM_CLIENT_STATE_TYPE_URL;

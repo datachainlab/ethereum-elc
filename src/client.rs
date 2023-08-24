@@ -61,7 +61,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
             commitment: UpdateClientCommitment {
                 prev_state_id: None,
                 new_state_id: state_id,
-                new_state: Some(any_client_state.into()),
+                new_state: Some(any_client_state),
                 prev_height: None,
                 new_height: height,
                 timestamp,
@@ -159,7 +159,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         proof: Vec<u8>,
     ) -> Result<light_client::StateVerificationResult, light_client::Error> {
         let (client_state, consensus_state, prefix, path, proof) =
-            Self::validate_args(ctx, client_id.clone(), prefix, path, proof_height, proof)?;
+            Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
         client_state
             .verify_height(proof_height.try_into().map_err(Error::ICS02)?)
@@ -202,7 +202,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         proof: Vec<u8>,
     ) -> Result<light_client::StateVerificationResult, light_client::Error> {
         let (client_state, consensus_state, prefix, path, proof) =
-            Self::validate_args(ctx, client_id.clone(), prefix, path, proof_height, proof)?;
+            Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
         client_state
             .verify_height(proof_height.try_into().map_err(Error::ICS02)?)
