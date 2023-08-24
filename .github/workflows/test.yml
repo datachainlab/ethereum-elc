@@ -8,5 +8,6 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-      - run: cargo fmt --all -- --check
+      - run: make lint-tools
+      - run: make lint
       - run: cargo test
