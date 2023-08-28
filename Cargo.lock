@@ -379,14 +379,13 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.2#fc44456936e3a208c05824f4be9bd85dde7b09e9"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.3#378bd904eb21b6130ce76ca6cba5aa5c2c59ec51"
 dependencies = [
  "bytes",
  "displaydoc",
  "ethereum-consensus",
  "ethereum-ibc-proto",
  "ethereum-light-client-verifier",
- "hex",
  "ibc",
  "ibc-proto",
  "prost",
@@ -399,11 +398,8 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.2#fc44456936e3a208c05824f4be9bd85dde7b09e9"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.3#378bd904eb21b6130ce76ca6cba5aa5c2c59ec51"
 dependencies = [
- "base64",
- "bytes",
- "ibc-proto",
  "prost",
  "serde",
 ]
