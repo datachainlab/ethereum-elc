@@ -16,7 +16,9 @@ use ibc::core::ics02_client::error::ClientError;
 use ibc::core::ics02_client::header::Header as Ics02Header;
 use ibc::core::ics23_commitment::commitment::{CommitmentPrefix, CommitmentProofBytes};
 use ibc::core::ics24_host::Path;
-use light_client::commitments::{CommitmentContext, StateCommitment, UpdateClientCommitment};
+use light_client::commitments::{
+    CommitmentContext, StateCommitment, TrustingPeriodContext, UpdateClientCommitment,
+};
 use light_client::ibc::IBCContext;
 use light_client::types::{Any, ClientId, Height, Time};
 use light_client::{
@@ -128,7 +130,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 .clone(),
         );
 
-        let prev_state_id = gen_state_id(client_state, trusted_consensus_state)?;
+        let prev_state_id = gen_state_id(client_state.clone(), trusted_consensus_state.clone())?;
         let new_state_id = gen_state_id(new_client_state.clone(), new_consensus_state.clone())?;
         Ok(UpdateClientResult {
             new_any_client_state: new_client_state.into(),
@@ -141,7 +143,12 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 prev_height: Some(trusted_height.into()),
                 new_height: height,
                 timestamp: header_timestamp,
-                context: CommitmentContext::Empty,
+                context: CommitmentContext::TrustingPeriod(TrustingPeriodContext::new(
+                    client_state.trusting_period,
+                    client_state.max_clock_drift,
+                    header_timestamp,
+                    trusted_consensus_state.timestamp.into(),
+                )),
             }
             .into(),
             prove: true,
