@@ -15,6 +15,7 @@ mod internal_prelude {
     pub use alloc::boxed::Box;
     pub use alloc::format;
     pub use alloc::string::{String, ToString};
+    pub use alloc::vec;
     pub use alloc::vec::Vec;
 }
 use internal_prelude::*;
