@@ -17,12 +17,14 @@ use ibc::core::ics02_client::header::Header as Ics02Header;
 use ibc::core::ics23_commitment::commitment::{CommitmentPrefix, CommitmentProofBytes};
 use ibc::core::ics24_host::Path;
 use light_client::commitments::{
-    CommitmentContext, StateCommitment, TrustingPeriodContext, UpdateClientCommitment,
+    EmittedState, TrustingPeriodContext, UpdateClientMessage, ValidationContext,
+    VerifyMembershipMessage,
 };
 use light_client::ibc::IBCContext;
 use light_client::types::{Any, ClientId, Height, Time};
 use light_client::{
-    CreateClientResult, HostClientReader, LightClient, StateVerificationResult, UpdateClientResult,
+    CreateClientResult, HostClientReader, LightClient, UpdateClientResult, VerifyMembershipResult,
+    VerifyNonMembershipResult,
 };
 use tiny_keccak::Keccak;
 
@@ -60,14 +62,14 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         let state_id = gen_state_id(client_state, consensus_state)?;
         Ok(CreateClientResult {
             height,
-            commitment: UpdateClientCommitment {
-                prev_state_id: None,
-                new_state_id: state_id,
-                new_state: Some(any_client_state),
+            message: UpdateClientMessage {
                 prev_height: None,
-                new_height: height,
+                prev_state_id: None,
+                post_height: height,
+                post_state_id: state_id,
+                emitted_states: vec![EmittedState(height, any_client_state)],
                 timestamp,
-                context: CommitmentContext::Empty,
+                context: ValidationContext::Empty,
             }
             .into(),
             prove: false,
@@ -131,19 +133,19 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         );
 
         let prev_state_id = gen_state_id(client_state.clone(), trusted_consensus_state.clone())?;
-        let new_state_id = gen_state_id(new_client_state.clone(), new_consensus_state.clone())?;
+        let post_state_id = gen_state_id(new_client_state.clone(), new_consensus_state.clone())?;
         Ok(UpdateClientResult {
             new_any_client_state: new_client_state.into(),
             new_any_consensus_state: new_consensus_state.into(),
             height,
-            commitment: UpdateClientCommitment {
-                prev_state_id: Some(prev_state_id),
-                new_state_id,
-                new_state: None,
+            message: UpdateClientMessage {
                 prev_height: Some(trusted_height.into()),
-                new_height: height,
+                prev_state_id: Some(prev_state_id),
+                post_height: height,
+                post_state_id,
+                emitted_states: Default::default(),
                 timestamp: header_timestamp,
-                context: CommitmentContext::TrustingPeriod(TrustingPeriodContext::new(
+                context: ValidationContext::TrustingPeriod(TrustingPeriodContext::new(
                     client_state.trusting_period,
                     client_state.max_clock_drift,
                     header_timestamp,
@@ -164,7 +166,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         value: Vec<u8>,
         proof_height: Height,
         proof: Vec<u8>,
-    ) -> Result<light_client::StateVerificationResult, light_client::Error> {
+    ) -> Result<light_client::VerifyMembershipResult, light_client::Error> {
         let (client_state, consensus_state, prefix, path, proof) =
             Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
@@ -187,8 +189,8 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 })
             })?;
 
-        Ok(StateVerificationResult {
-            state_commitment: StateCommitment::new(
+        Ok(VerifyMembershipResult {
+            message: VerifyMembershipMessage::new(
                 prefix.into_vec(),
                 path.to_string(),
                 Some(value),
@@ -207,7 +209,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         path: String,
         proof_height: Height,
         proof: Vec<u8>,
-    ) -> Result<light_client::StateVerificationResult, light_client::Error> {
+    ) -> Result<light_client::VerifyNonMembershipResult, light_client::Error> {
         let (client_state, consensus_state, prefix, path, proof) =
             Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
@@ -223,8 +225,8 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
                 })
             })?;
 
-        Ok(StateVerificationResult {
-            state_commitment: StateCommitment::new(
+        Ok(VerifyNonMembershipResult {
+            message: VerifyMembershipMessage::new(
                 prefix.into_vec(),
                 path.to_string(),
                 None,
