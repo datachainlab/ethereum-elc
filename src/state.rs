@@ -11,19 +11,23 @@ use light_client::types::proto::google::protobuf::Any as IBCAny;
 use light_client::types::Any;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct ClientState<const SYNC_COMMITTEE_SIZE: usize>(
-    pub(crate) EthereumClientState<SYNC_COMMITTEE_SIZE>,
+pub struct ClientState<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize>(
+    pub(crate) EthereumClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
 );
 
-impl<const SYNC_COMMITTEE_SIZE: usize> Deref for ClientState<SYNC_COMMITTEE_SIZE> {
-    type Target = EthereumClientState<SYNC_COMMITTEE_SIZE>;
+impl<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize> Deref
+    for ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>
+{
+    type Target = EthereumClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl<const SYNC_COMMITTEE_SIZE: usize> TryFrom<Any> for ClientState<SYNC_COMMITTEE_SIZE> {
+impl<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize> TryFrom<Any>
+    for ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>
+{
     type Error = Error;
 
     fn try_from(value: Any) -> Result<Self, Self::Error> {
@@ -38,8 +42,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> TryFrom<Any> for ClientState<SYNC_COMMITT
     }
 }
 
-impl<const SYNC_COMMITTEE_SIZE: usize> From<ClientState<SYNC_COMMITTEE_SIZE>> for Any {
-    fn from(value: ClientState<SYNC_COMMITTEE_SIZE>) -> Self {
+impl<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize>
+    From<ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>> for Any
+{
+    fn from(value: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>) -> Self {
         IBCAny::from(value.0).into()
     }
 }
@@ -78,9 +84,12 @@ impl From<ConsensusState> for Any {
 
 // canonicalize_client_state canonicalizes some fields of specified client state
 // target fields: latest_slot, latest_execution_block_number, frozen_height
-pub fn canonicalize_client_state<const SYNC_COMMITTEE_SIZE: usize>(
-    client_state: ClientState<SYNC_COMMITTEE_SIZE>,
-) -> ClientState<SYNC_COMMITTEE_SIZE> {
+pub fn canonicalize_client_state<
+    const SYNC_COMMITTEE_SIZE: usize,
+    const EXECUTION_PAYLOAD_TREE_DEPTH: usize,
+>(
+    client_state: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
+) -> ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH> {
     let mut client_state = client_state.0;
     client_state.latest_slot = 0u64.into();
     client_state.latest_execution_block_number = 0u64.into();
@@ -96,8 +105,8 @@ pub fn canonicalize_consensus_state(consensus_state: ConsensusState) -> Consensu
     ConsensusState(consensus_state)
 }
 
-pub fn gen_state_id<const SYNC_COMMITTEE_SIZE: usize>(
-    client_state: ClientState<SYNC_COMMITTEE_SIZE>,
+pub fn gen_state_id<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize>(
+    client_state: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
     consensus_state: ConsensusState,
 ) -> Result<StateID, Error> {
     Ok(gen_state_id_from_any(
