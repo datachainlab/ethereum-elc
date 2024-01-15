@@ -28,9 +28,14 @@ use light_client::{
 };
 use tiny_keccak::Keccak;
 
-pub struct EthereumLightClient<const SYNC_COMMITTEE_SIZE: usize>;
+pub struct EthereumLightClient<
+    const SYNC_COMMITTEE_SIZE: usize,
+    const EXECUTION_PAYLOAD_TREE_DEPTH: usize,
+>;
 
-impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_COMMITTEE_SIZE> {
+impl<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize> LightClient
+    for EthereumLightClient<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>
+{
     fn client_type(&self) -> String {
         eth_client_type().as_str().into()
     }
@@ -40,7 +45,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         ctx: &dyn HostClientReader,
         client_id: &ClientId,
     ) -> Result<Height, light_client::Error> {
-        let client_state: ClientState<SYNC_COMMITTEE_SIZE> =
+        let client_state: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH> =
             ctx.client_state(client_id)?.try_into()?;
         Ok(client_state.latest_height().into())
     }
@@ -51,7 +56,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         any_client_state: Any,
         any_consensus_state: Any,
     ) -> Result<light_client::CreateClientResult, light_client::Error> {
-        let client_state = ClientState::<SYNC_COMMITTEE_SIZE>::try_from(any_client_state.clone())?;
+        let client_state =
+            ClientState::<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>::try_from(
+                any_client_state.clone(),
+            )?;
         let consensus_state = ConsensusState::try_from(any_consensus_state)?;
         let _ = client_state
             .initialise(consensus_state.0.clone().into())
@@ -84,7 +92,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
     ) -> Result<light_client::UpdateClientResult, light_client::Error> {
         let header = Header::<SYNC_COMMITTEE_SIZE>::try_from(any_header.clone())?;
 
-        let client_state: ClientState<SYNC_COMMITTEE_SIZE> =
+        let client_state: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH> =
             ctx.client_state(&client_id)?.try_into()?;
 
         let height = header.height().into();
@@ -109,7 +117,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
             consensus_state: new_consensus_state,
         } = client_state
             .check_header_and_update_state(
-                &IBCContext::<EthereumClientState<SYNC_COMMITTEE_SIZE>, EthereumConsensusState>::new(ctx),
+                &IBCContext::<
+                    EthereumClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
+                    EthereumConsensusState,
+                >::new(ctx),
                 client_id.into(),
                 any_header.into(),
             )
@@ -120,9 +131,9 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
             })?;
 
         let new_client_state = ClientState(
-            downcast_client_state::<EthereumClientState<SYNC_COMMITTEE_SIZE>>(
-                new_client_state.as_ref(),
-            )
+            downcast_client_state::<
+                EthereumClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
+            >(new_client_state.as_ref())
             .unwrap()
             .clone(),
         );
@@ -238,7 +249,9 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
     }
 }
 
-impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> {
+impl<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TREE_DEPTH: usize>
+    EthereumLightClient<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>
+{
     fn validate_args(
         ctx: &dyn HostClientReader,
         client_id: ClientId,
@@ -248,7 +261,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
         proof: Vec<u8>,
     ) -> Result<
         (
-            ClientState<SYNC_COMMITTEE_SIZE>,
+            ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH>,
             ConsensusState,
             CommitmentPrefix,
             Path,
@@ -256,7 +269,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
         ),
         light_client::Error,
     > {
-        let client_state: ClientState<SYNC_COMMITTEE_SIZE> =
+        let client_state: ClientState<SYNC_COMMITTEE_SIZE, EXECUTION_PAYLOAD_TREE_DEPTH> =
             ctx.client_state(&client_id)?.try_into()?;
 
         if client_state.is_frozen() {
