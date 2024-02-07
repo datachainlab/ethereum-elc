@@ -1,5 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::result_large_err)]
+#![allow(clippy::large_enum_variant)]
 
 use client::EthereumLightClient;
 use ethereum_ibc::client_state::ETHEREUM_CLIENT_STATE_TYPE_URL;
@@ -9,7 +10,7 @@ extern crate alloc;
 
 pub mod client;
 pub mod errors;
-pub mod header;
+pub mod message;
 pub mod state;
 pub use ethereum_ibc as ibc;
 
