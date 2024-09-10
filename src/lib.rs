@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
 #![allow(clippy::result_large_err)]
 #![allow(clippy::large_enum_variant)]
 
@@ -14,6 +14,7 @@ pub mod message;
 pub mod state;
 pub use ethereum_ibc as ibc;
 
+#[allow(unused_imports)]
 mod internal_prelude {
     pub use alloc::boxed::Box;
     pub use alloc::format;
