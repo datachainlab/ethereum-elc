@@ -110,9 +110,7 @@ pub fn gen_state_id<const SYNC_COMMITTEE_SIZE: usize, const EXECUTION_PAYLOAD_TR
     consensus_state: ConsensusState,
 ) -> Result<StateID, Error> {
     Ok(gen_state_id_from_any(
-        &canonicalize_client_state(client_state).try_into().unwrap(),
-        &canonicalize_consensus_state(consensus_state)
-            .try_into()
-            .unwrap(),
+        &canonicalize_client_state(client_state).into(),
+        &canonicalize_consensus_state(consensus_state).into(),
     )?)
 }
