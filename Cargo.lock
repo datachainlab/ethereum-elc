@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "ethereum-consensus"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=186c5b1d9935f15428ca8b209ad99ed20eaf81c6#186c5b1d9935f15428ca8b209ad99ed20eaf81c6"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.3#edc099170b44afee83508ffa1c951b32361e4d4f"
 dependencies = [
  "displaydoc",
  "hex",
@@ -480,7 +480,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.12#50790b532a0abb8d2310c03ff24c217ba27e103d"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.14#27719dd36f9971bc4a7d09c1059b454e3ce2a073"
 dependencies = [
  "bytes",
  "displaydoc",
@@ -500,7 +500,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.12#50790b532a0abb8d2310c03ff24c217ba27e103d"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.14#27719dd36f9971bc4a7d09c1059b454e3ce2a073"
 dependencies = [
  "prost",
  "serde",
@@ -509,11 +509,10 @@ dependencies = [
 [[package]]
 name = "ethereum-light-client-verifier"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=186c5b1d9935f15428ca8b209ad99ed20eaf81c6#186c5b1d9935f15428ca8b209ad99ed20eaf81c6"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.3#edc099170b44afee83508ffa1c951b32361e4d4f"
 dependencies = [
  "displaydoc",
  "ethereum-consensus",
- "log",
  "patricia-merkle-trie",
  "primitive-types",
  "rlp",
