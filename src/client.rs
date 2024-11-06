@@ -3,11 +3,10 @@ use crate::internal_prelude::*;
 use crate::message::{ClientMessage, Header, Misbehaviour};
 use crate::state::{gen_state_id, ClientState, ConsensusState};
 use core::str::FromStr;
+use core::time::Duration;
 use ethereum_ibc::client_state::ClientState as EthereumClientState;
-use ethereum_ibc::consensus::compute::compute_timestamp_at_slot;
 use ethereum_ibc::consensus_state::ConsensusState as EthereumConsensusState;
 use ethereum_ibc::eth_client_type;
-use ethereum_ibc::light_client_verifier::updates::ConsensusUpdate;
 use ibc::core::ics02_client::client_state::{
     downcast_client_state, ClientState as Ics02ClientState, UpdatedState,
 };
@@ -351,20 +350,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
             .clone(),
         );
 
-        let cctx = client_state.build_context(&ibc_ctx);
-        let (update_0, update_1) = misbehaviour.data.clone().updates();
-
-        let update_0_timestamp = Time::from_unix_timestamp_nanos(
-            compute_timestamp_at_slot(&cctx, update_0.finalized_beacon_header().slot).0 as u128
-                * 1_000_000_000,
-        )
-        .unwrap();
-        let update_1_timestamp = Time::from_unix_timestamp_nanos(
-            compute_timestamp_at_slot(&cctx, update_1.finalized_beacon_header().slot).0 as u128
-                * 1_000_000_000,
-        )
-        .unwrap();
-
         Ok(MisbehaviourData {
             new_any_client_state: new_client_state.into(),
             message: MisbehaviourProxyMessage {
@@ -374,25 +359,13 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
                     &client_state,
                     vec![trusted_height.into()],
                 )?,
+                // For misbehaviour, it is acceptable if the header's timestamp points to the future.
                 context: ValidationContext::TrustingPeriod(TrustingPeriodContext::new(
                     client_state.trusting_period,
-                    client_state.max_clock_drift,
-                    update_0_timestamp,
+                    Duration::ZERO,
+                    Time::unix_epoch(),
                     trusted_consensus_state.timestamp.into(),
-                ))
-                .aggregate(ValidationContext::TrustingPeriod(
-                    TrustingPeriodContext::new(
-                        client_state.trusting_period,
-                        client_state.max_clock_drift,
-                        update_1_timestamp,
-                        trusted_consensus_state.timestamp.into(),
-                    ),
-                ))
-                .map_err(|e| {
-                    Error::ICS02(ClientError::ClientSpecific {
-                        description: e.to_string(),
-                    })
-                })?,
+                )),
                 client_message: Any::from(misbehaviour),
             },
         })
