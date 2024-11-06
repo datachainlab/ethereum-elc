@@ -452,13 +452,12 @@ dependencies = [
 [[package]]
 name = "ethereum-consensus"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.3#edc099170b44afee83508ffa1c951b32361e4d4f"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.4#8ef10cf5982d28cb9d71b126ca41d364dda18788"
 dependencies = [
  "displaydoc",
  "hex",
  "milagro_bls",
  "primitive-types",
- "rs_merkle",
  "serde",
  "sha2 0.10.7",
  "ssz-rs",
@@ -480,7 +479,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.14#27719dd36f9971bc4a7d09c1059b454e3ce2a073"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.15#d652f330f24d638720cbed03099f3df7ae2d5b30"
 dependencies = [
  "bytes",
  "displaydoc",
@@ -500,7 +499,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.14#27719dd36f9971bc4a7d09c1059b454e3ce2a073"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.15#d652f330f24d638720cbed03099f3df7ae2d5b30"
 dependencies = [
  "prost",
  "serde",
@@ -509,7 +508,7 @@ dependencies = [
 [[package]]
 name = "ethereum-light-client-verifier"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.3#edc099170b44afee83508ffa1c951b32361e4d4f"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.4#8ef10cf5982d28cb9d71b126ca41d364dda18788"
 dependencies = [
  "displaydoc",
  "ethereum-consensus",
@@ -1287,15 +1286,6 @@ checksum = "bb919243f34364b6bd2fc10ef797edbfa75f33c252e7998527479c6d6b47e1ec"
 dependencies = [
  "bytes",
  "rustc-hex",
-]
-
-[[package]]
-name = "rs_merkle"
-version = "1.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05225752ca6ede4cb1b73aa37ce3904affd042e98f28246f56f438ebfd47a810"
-dependencies = [
- "sha2 0.10.7",
 ]
 
 [[package]]

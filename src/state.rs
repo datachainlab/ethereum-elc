@@ -77,23 +77,14 @@ impl From<ConsensusState> for Any {
 }
 
 // canonicalize_client_state canonicalizes some fields of specified client state
-// target fields: latest_slot, latest_execution_block_number, frozen_height
+// target fields: latest_execution_block_number, frozen_height
 pub fn canonicalize_client_state<const SYNC_COMMITTEE_SIZE: usize>(
     client_state: ClientState<SYNC_COMMITTEE_SIZE>,
 ) -> ClientState<SYNC_COMMITTEE_SIZE> {
     let mut client_state = client_state.0;
-    client_state.latest_slot = 0u64.into();
     client_state.latest_execution_block_number = 0u64.into();
     client_state.frozen_height = None;
     ClientState(client_state)
-}
-
-// canonicalize_consensus_state canonicalizes some fields of specified consensus state
-// target field: next_sync_committee
-pub fn canonicalize_consensus_state(consensus_state: ConsensusState) -> ConsensusState {
-    let mut consensus_state = consensus_state.0;
-    consensus_state.next_sync_committee = None;
-    ConsensusState(consensus_state)
 }
 
 pub fn gen_state_id<const SYNC_COMMITTEE_SIZE: usize>(
@@ -102,6 +93,6 @@ pub fn gen_state_id<const SYNC_COMMITTEE_SIZE: usize>(
 ) -> Result<StateID, Error> {
     Ok(gen_state_id_from_any(
         &canonicalize_client_state(client_state).into(),
-        &canonicalize_consensus_state(consensus_state).into(),
+        &consensus_state.into(),
     )?)
 }
