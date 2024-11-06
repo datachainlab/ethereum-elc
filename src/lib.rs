@@ -9,7 +9,6 @@ extern crate alloc;
 
 pub mod client;
 pub mod errors;
-pub mod message;
 pub mod state;
 pub use ethereum_ibc as ibc;
 

@@ -472,14 +472,13 @@ dependencies = [
  "ethereum-ibc",
  "ibc",
  "light-client",
- "serde",
  "tiny-keccak 1.5.0",
 ]
 
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.15#d652f330f24d638720cbed03099f3df7ae2d5b30"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=8243b634ae0953a9e0c2fd5f64c2b830723ab8f6#8243b634ae0953a9e0c2fd5f64c2b830723ab8f6"
 dependencies = [
  "bytes",
  "displaydoc",
@@ -499,7 +498,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.15#d652f330f24d638720cbed03099f3df7ae2d5b30"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=8243b634ae0953a9e0c2fd5f64c2b830723ab8f6#8243b634ae0953a9e0c2fd5f64c2b830723ab8f6"
 dependencies = [
  "prost",
  "serde",
