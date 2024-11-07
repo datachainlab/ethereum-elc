@@ -9,4 +9,4 @@ displaydoc = { version = "0.2", default-features = false }
 tiny-keccak = { version = "1.4" }
 
 light-client = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.11", default-features = false, features = ["ibc"] }
-ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "8243b634ae0953a9e0c2fd5f64c2b830723ab8f6", default-features = false }
+ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "v0.0.16", default-features = false }
