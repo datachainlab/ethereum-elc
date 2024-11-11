@@ -117,13 +117,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
         let (client_state, consensus_state, prefix, path, proof) =
             Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
-        client_state
-            .verify_height(proof_height.try_into().map_err(Error::ICS02)?)
-            .map_err(|e| Error::ICS02(e.into()))?;
-
         let value = keccak256(&value);
         client_state
             .verify_membership(
+                proof_height.try_into().map_err(Error::ICS02)?,
                 &prefix,
                 &proof,
                 consensus_state.root(),
@@ -160,11 +157,13 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
             Self::validate_args(ctx, client_id, prefix, path, proof_height, proof)?;
 
         client_state
-            .verify_height(proof_height.try_into().map_err(Error::ICS02)?)
-            .map_err(|e| Error::ICS02(e.into()))?;
-
-        client_state
-            .verify_non_membership(&prefix, &proof, consensus_state.root(), path.clone())
+            .verify_non_membership(
+                proof_height.try_into().map_err(Error::ICS02)?,
+                &prefix,
+                &proof,
+                consensus_state.root(),
+                path.clone(),
+            )
             .map_err(|e| {
                 Error::ICS02(ClientError::ClientSpecific {
                     description: e.to_string(),
@@ -206,13 +205,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
                 .try_into()
                 .map_err(Error::ICS02)?;
 
-        if client_state.is_frozen() {
-            return Err(Error::ICS02(ClientError::ClientFrozen {
-                client_id: client_id.into(),
-            })
-            .into());
-        }
-
         let consensus_state: ConsensusState =
             IBCAny::from(ctx.consensus_state(&client_id, &proof_height)?)
                 .try_into()
@@ -235,13 +227,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
             IBCAny::from(ctx.client_state(&client_id)?)
                 .try_into()
                 .map_err(Error::ICS02)?;
-
-        if client_state.is_frozen() {
-            return Err(Error::ICS02(ClientError::ClientFrozen {
-                client_id: client_id.into(),
-            })
-            .into());
-        }
 
         let height = header.height().into();
         let header_timestamp: Time = header.timestamp().into();
@@ -321,13 +306,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
             IBCAny::from(ctx.client_state(&client_id)?)
                 .try_into()
                 .map_err(Error::ICS02)?;
-
-        if client_state.is_frozen() {
-            return Err(Error::ICS02(ClientError::ClientFrozen {
-                client_id: client_id.into(),
-            })
-            .into());
-        }
 
         let trusted_height = misbehaviour.trusted_sync_committee.height;
         let trusted_consensus_state: ConsensusState = IBCAny::from(

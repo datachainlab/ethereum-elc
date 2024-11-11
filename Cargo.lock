@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "ethereum-consensus"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007#6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.5#6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007"
 dependencies = [
  "displaydoc",
  "hex",
@@ -478,7 +478,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=22051797833a86c9cd9f40b46cee0181382176c1#22051797833a86c9cd9f40b46cee0181382176c1"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.17#23cba6fe3ff87df2ac8d4350a49a4c2811e5e156"
 dependencies = [
  "bytes",
  "displaydoc",
@@ -498,7 +498,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=22051797833a86c9cd9f40b46cee0181382176c1#22051797833a86c9cd9f40b46cee0181382176c1"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.17#23cba6fe3ff87df2ac8d4350a49a4c2811e5e156"
 dependencies = [
  "prost",
  "serde",
@@ -507,7 +507,7 @@ dependencies = [
 [[package]]
 name = "ethereum-light-client-verifier"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007#6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.5#6c2b3b0f1a58c4df3eedeb9a36de0e7fcab25007"
 dependencies = [
  "displaydoc",
  "ethereum-consensus",
