@@ -1,0 +1,3 @@
+[submodule "tests/lcp"]
+	path = tests/lcp
+	url = https://github.com/datachainlab/lcp
