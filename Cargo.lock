@@ -452,12 +452,13 @@ dependencies = [
 [[package]]
 name = "ethereum-consensus"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.6#e2026b51afde85d4bcf48633e22c7d7510d4ae69"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.7#4645ecd3cd2d5e1515826ecb6f81f7801888e51a"
 dependencies = [
  "displaydoc",
  "hex",
  "milagro_bls",
  "primitive-types",
+ "rs_merkle",
  "serde",
  "sha2 0.10.7",
  "ssz-rs",
@@ -469,16 +470,21 @@ name = "ethereum-elc"
 version = "0.1.0"
 dependencies = [
  "displaydoc",
+ "ethereum-consensus",
  "ethereum-ibc",
+ "ethereum-light-client-verifier",
+ "hex-literal",
  "ibc",
+ "lcp-types",
  "light-client",
- "tiny-keccak 1.5.0",
+ "store",
+ "tiny-keccak 2.0.2",
 ]
 
 [[package]]
 name = "ethereum-ibc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.18#80ea9cc3fb55a8231d0de952df42bffd35d30c90"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.19#06864ca06431906fdad149839cda52ba43da48d2"
 dependencies = [
  "bytes",
  "displaydoc",
@@ -498,7 +504,7 @@ dependencies = [
 [[package]]
 name = "ethereum-ibc-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.18#80ea9cc3fb55a8231d0de952df42bffd35d30c90"
+source = "git+https://github.com/datachainlab/ethereum-ibc-rs?rev=v0.0.19#06864ca06431906fdad149839cda52ba43da48d2"
 dependencies = [
  "prost",
  "serde",
@@ -507,12 +513,13 @@ dependencies = [
 [[package]]
 name = "ethereum-light-client-verifier"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.6#e2026b51afde85d4bcf48633e22c7d7510d4ae69"
+source = "git+https://github.com/datachainlab/ethereum-light-client-rs?rev=v0.1.7#4645ecd3cd2d5e1515826ecb6f81f7801888e51a"
 dependencies = [
  "displaydoc",
  "ethereum-consensus",
  "patricia-merkle-trie",
  "primitive-types",
+ "rand",
  "rlp",
  "serde",
  "trie-db",
@@ -524,6 +531,9 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "835c052cb0c08c1acf6ffd71c022172e18723949c8282f2b9f27efbc51e64534"
 dependencies = [
+ "byteorder",
+ "rand",
+ "rustc-hex",
  "static_assertions",
 ]
 
@@ -770,6 +780,15 @@ name = "ident_case"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
+
+[[package]]
+name = "impl-codec"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba6a270039626615617f3f36d15fc827041df3b78c439da2cadfa47455a77f2f"
+dependencies = [
+ "parity-scale-codec",
+]
 
 [[package]]
 name = "impl-serde"
@@ -1030,9 +1049,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd8e946cc0cc711189c0b0249fb8b599cbeeab9784d83c415719368bb8d4ac64"
 dependencies = [
  "arrayvec",
+ "bitvec",
  "byte-slice-cast",
  "impl-trait-for-tuples",
  "parity-scale-codec-derive",
+ "serde",
 ]
 
 [[package]]
@@ -1117,6 +1138,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f3486ccba82358b11a77516035647c34ba167dfa53312630de83b12bd4f3d66"
 dependencies = [
  "fixed-hash",
+ "impl-codec",
  "impl-serde",
  "uint",
 ]
@@ -1240,6 +1262,8 @@ version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "34af8d1a0e25924bc5b7c43c079c942339d8f0a8b57c39049bef581b46327404"
 dependencies = [
+ "libc",
+ "rand_chacha",
  "rand_core",
 ]
 
@@ -1258,6 +1282,9 @@ name = "rand_core"
 version = "0.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
+dependencies = [
+ "getrandom",
+]
 
 [[package]]
 name = "rand_xorshift"
@@ -1285,6 +1312,15 @@ checksum = "bb919243f34364b6bd2fc10ef797edbfa75f33c252e7998527479c6d6b47e1ec"
 dependencies = [
  "bytes",
  "rustc-hex",
+]
+
+[[package]]
+name = "rs_merkle"
+version = "1.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b241d2e59b74ef9e98d94c78c47623d04c8392abaf82014dfd372a16041128f"
+dependencies = [
+ "sha2 0.10.7",
 ]
 
 [[package]]
@@ -1845,6 +1881,7 @@ dependencies = [
  "hash-db",
  "hashbrown 0.12.3",
  "log",
+ "rustc-hex",
  "smallvec",
 ]
 
