@@ -1,4 +1,4 @@
-#![no_std]
+#![cfg_attr(not(test), no_std)]
 #![allow(clippy::result_large_err)]
 #![allow(clippy::large_enum_variant)]
 
