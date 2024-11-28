@@ -67,7 +67,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> LightClient for EthereumLightClient<SYNC_
             .map_err(Error::ICS02)?;
 
         let height = client_state.latest_height().into();
-        let timestamp: Time = consensus_state.timestamp().into();
+        let timestamp: Time = consensus_state
+            .timestamp()
+            .try_into()
+            .map_err(Error::Time)?;
         let state_id = gen_state_id(client_state, consensus_state)?;
         Ok(CreateClientResult {
             height,
@@ -228,7 +231,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
                 .map_err(Error::ICS02)?;
 
         let height = header.height().into();
-        let header_timestamp: Time = header.timestamp().into();
+        let header_timestamp: Time = header.timestamp().try_into().map_err(Error::Time)?;
         let trusted_height = header.trusted_sync_committee.height;
 
         let trusted_consensus_state: ConsensusState = IBCAny::from(
@@ -287,7 +290,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
                     client_state.trusting_period,
                     client_state.max_clock_drift,
                     header_timestamp,
-                    trusted_consensus_state.timestamp.into(),
+                    trusted_consensus_state
+                        .timestamp
+                        .try_into()
+                        .map_err(Error::Time)?,
                 )),
             },
             prove: true,
@@ -351,7 +357,10 @@ impl<const SYNC_COMMITTEE_SIZE: usize> EthereumLightClient<SYNC_COMMITTEE_SIZE> 
                     client_state.trusting_period,
                     Duration::ZERO,
                     Time::unix_epoch(),
-                    trusted_consensus_state.timestamp.into(),
+                    trusted_consensus_state
+                        .timestamp
+                        .try_into()
+                        .map_err(Error::Time)?,
                 )),
                 client_message: IBCAny::from(misbehaviour).into(),
             },

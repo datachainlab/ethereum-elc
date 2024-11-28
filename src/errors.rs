@@ -16,6 +16,8 @@ pub enum Error {
     ICS24Path(ibc::core::ics24_host::path::PathError),
     /// unexpected client type: `{0}`
     UnexpectedClientType(String),
+    /// time conversion error: `{0}`
+    Time(light_client::types::TimeError),
 }
 
 impl LightClientSpecificError for Error {}
