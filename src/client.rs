@@ -520,7 +520,7 @@ mod tests {
             config::minimal::get_config(),
             keccak256("genesis_validators_root"),
             U64(1578009600),
-            Fraction::new(2, 3),
+            Fraction::new(2, 3).unwrap(),
             SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
                 .unwrap()
@@ -557,7 +557,7 @@ mod tests {
                 ibc_commitments_slot: H256(hex!(
                     "1ee222554989dda120e26ecacf756fe1235cd8d726706b57517715dde4f0c900"
                 )),
-                trust_level: Fraction::new(2, 3),
+                trust_level: Fraction::new(2, 3).unwrap(),
                 trusting_period: Duration::from_secs(60 * 60 * 27),
                 max_clock_drift: Duration::from_secs(60),
                 latest_execution_block_number: 1.into(),
