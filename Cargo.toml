@@ -9,11 +9,11 @@ displaydoc = { version = "0.2", default-features = false }
 tiny-keccak = { version = "2.0.2", default-features = false }
 
 light-client = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.12", default-features = false, features = ["ibc"] }
-ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "v0.0.19", default-features = false }
+ethereum-ibc = { git = "https://github.com/datachainlab/ethereum-ibc-rs", rev = "v0.1.0", default-features = false }
 
 [dev-dependencies]
 hex-literal = "0.4.1"
 lcp-types = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.12", default-features = false, features = ["std"] }
 store = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.12", default-features = false }
-ethereum-consensus = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.1.7", default-features = false, features = ["prover"] }
-ethereum-light-client-verifier = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.1.7", default-features = false, features = ["test-utils"] }
+ethereum-consensus = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.2.0", default-features = false, features = ["prover"] }
+ethereum-light-client-verifier = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.2.0", default-features = false, features = ["test-utils"] }
