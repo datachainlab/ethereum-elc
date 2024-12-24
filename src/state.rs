@@ -5,12 +5,13 @@ use light_client::commitments::{gen_state_id_from_any, StateID};
 use light_client::types::proto::google::protobuf::Any as IBCAny;
 
 // canonicalize_client_state canonicalizes some fields of specified client state
-// target fields: latest_execution_block_number
+// target fields: latest_execution_block_number, frozen_height
 pub fn canonicalize_client_state<const SYNC_COMMITTEE_SIZE: usize>(
     client_state: ClientState<SYNC_COMMITTEE_SIZE>,
 ) -> ClientState<SYNC_COMMITTEE_SIZE> {
     let mut client_state = client_state;
     client_state.latest_execution_block_number = 0u64.into();
+    client_state.frozen_height = None;
     client_state
 }
 
