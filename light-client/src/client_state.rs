@@ -29,6 +29,7 @@ use ethereum_light_client_verifier::context::{
     ChainConsensusVerificationContext, Fraction, LightClientContext,
 };
 use ethereum_light_client_verifier::execution::ExecutionVerifier;
+use ethereum_light_client_verifier::updates::ConsensusUpdate;
 use light_client::types::{Any, ClientId, Height, Time};
 use prost::Message;
 use serde::{Deserialize, Serialize};
@@ -180,7 +181,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> ClientState<SYNC_COMMITTEE_SIZE> {
         header: Header<SYNC_COMMITTEE_SIZE>,
     ) -> Result<(ClientState<SYNC_COMMITTEE_SIZE>, ConsensusState), Error> {
         let cc = self.build_context(now);
-        header.validate(&cc)?;
+        header.validate()?;
 
         let trusted_sync_committee = header.trusted_sync_committee;
         let trusted_consensus_state = TrustedConsensusState::new(
@@ -191,7 +192,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> ClientState<SYNC_COMMITTEE_SIZE> {
         let consensus_update = header.consensus_update;
         let execution_update = header.execution_update;
         let account_update = header.account_update;
-        let header_timestamp = header.timestamp;
 
         self.consensus_verifier
             .validate_updates(
@@ -201,6 +201,12 @@ impl<const SYNC_COMMITTEE_SIZE: usize> ClientState<SYNC_COMMITTEE_SIZE> {
                 &execution_update,
             )
             .map_err(Error::Verification)?;
+
+        // Derived only now: post-Gloas this reads the RLP execution header, which
+        // `validate_updates` has just bound to the consensus update.
+        let header_timestamp =
+            execution_update.timestamp(&cc, consensus_update.finalized_beacon_header().slot)?;
+        let header_timestamp = Time::from_unix_timestamp_nanos(header_timestamp)?;
 
         verify_account_storage(
             &self.execution_verifier,
@@ -364,6 +370,7 @@ impl<const SYNC_COMMITTEE_SIZE: usize> From<ClientState<SYNC_COMMITTEE_SIZE>> fo
                     execution_payload_state_root_gindex: spec.execution_payload_state_root_gindex,
                     execution_payload_block_number_gindex: spec
                         .execution_payload_block_number_gindex,
+                    execution_block_hash_gindex: spec.execution_block_hash_gindex,
                 }),
             }
         }
@@ -718,7 +725,7 @@ mod integration_tests {
     use crate::misbehaviour::Misbehaviour;
     use crate::misc::new_timestamp;
     use crate::test_utils::{
-        account_proof, create_test_client_state_from_ctx, to_consensus_update_info,
+        account_proof, create_test_client_state_from_ctx, gloas_devnet, to_consensus_update_info,
         TestClientState, TestFixture,
     };
     use core::str::FromStr;
@@ -821,6 +828,7 @@ mod integration_tests {
             state_root_branch: execution_update.state_root_branch,
             block_number: execution_update.block_number,
             block_number_branch: execution_update.block_number_branch,
+            rlp: vec![],
             block_hash: H256::default(),
             block_hash_branch: vec![],
         };
@@ -845,7 +853,6 @@ mod integration_tests {
                 account_proof: account_proof::get_proof(),
                 account_storage_root: account_proof::get_storage_root(),
             },
-            timestamp: new_timestamp(timestamp_secs).unwrap(),
         };
 
         // Create client state with the correct IBC address for the account proof
@@ -902,6 +909,7 @@ mod integration_tests {
             state_root_branch: execution_update.state_root_branch,
             block_number: execution_update.block_number,
             block_number_branch: execution_update.block_number_branch,
+            rlp: vec![],
             block_hash: H256::default(),
             block_hash_branch: vec![],
         };
@@ -937,7 +945,6 @@ mod integration_tests {
                 account_proof: account_proof::get_proof(),
                 account_storage_root: account_proof::get_storage_root(),
             },
-            timestamp: new_timestamp(timestamp_secs).unwrap(),
         };
 
         let mut client_state = create_test_client_state_from_ctx(&fixture.ctx);
@@ -1114,5 +1121,74 @@ mod integration_tests {
             result.unwrap_err(),
             Error::EthereumLightClientTypes(_)
         ));
+    }
+
+    /// The trusted state is finalized in Fulu and every following update is finalized in
+    /// Gloas: the period 1 update (Fulu -> Gloas, a period transition since the fork activates
+    /// at a period boundary), the period 2 update (a period transition inside Gloas) and a
+    /// finality update inside period 2.
+    #[test]
+    fn test_check_header_fulu_to_gloas() {
+        let client_state = gloas_devnet::client_state();
+        let consensus_state = gloas_devnet::consensus_state();
+
+        // 1. the first update after the fork: finalized in Gloas, trusted state in Fulu
+        let header = gloas_devnet::period_1_header();
+        assert!(!header.execution_update.rlp.is_empty());
+        let now = new_timestamp(gloas_devnet::PERIOD_1_NOW).unwrap();
+        let (client_state, consensus_state) = client_state
+            .check_header_and_update_state(now, &consensus_state, header)
+            .unwrap();
+        assert_eq!(
+            consensus_state.slot,
+            U64(gloas_devnet::PERIOD_1_FINALIZED_SLOT)
+        );
+        assert_eq!(
+            consensus_state.timestamp,
+            new_timestamp(gloas_devnet::PERIOD_1_HEADER_TIMESTAMP).unwrap()
+        );
+        assert_ne!(consensus_state.storage_root, H256::default());
+        assert_eq!(
+            client_state.latest_execution_block_number,
+            U64(gloas_devnet::PERIOD_1_EXECUTION_BLOCK_NUMBER)
+        );
+
+        // 2. a period transition inside Gloas
+        let header = gloas_devnet::period_2_header();
+        let now = new_timestamp(gloas_devnet::PERIOD_2_NOW).unwrap();
+        let (client_state, consensus_state) = client_state
+            .check_header_and_update_state(now, &consensus_state, header)
+            .unwrap();
+        assert_eq!(
+            consensus_state.slot,
+            U64(gloas_devnet::PERIOD_2_FINALIZED_SLOT)
+        );
+        assert_eq!(
+            consensus_state.timestamp,
+            new_timestamp(gloas_devnet::PERIOD_2_HEADER_TIMESTAMP).unwrap()
+        );
+        assert_eq!(
+            client_state.latest_execution_block_number,
+            U64(gloas_devnet::PERIOD_2_EXECUTION_BLOCK_NUMBER)
+        );
+
+        // 3. a finality update inside the same period
+        let header = gloas_devnet::steady_header();
+        let now = new_timestamp(gloas_devnet::STEADY_NOW).unwrap();
+        let (client_state, consensus_state) = client_state
+            .check_header_and_update_state(now, &consensus_state, header)
+            .unwrap();
+        assert_eq!(
+            consensus_state.slot,
+            U64(gloas_devnet::STEADY_FINALIZED_SLOT)
+        );
+        assert_eq!(
+            consensus_state.timestamp,
+            new_timestamp(gloas_devnet::STEADY_HEADER_TIMESTAMP).unwrap()
+        );
+        assert_eq!(
+            client_state.latest_execution_block_number,
+            U64(gloas_devnet::STEADY_EXECUTION_BLOCK_NUMBER)
+        );
     }
 }

@@ -75,9 +75,6 @@ pub struct Header {
     pub account_update: ::core::option::Option<
         ::ethereum_light_client_proto::ibc::lightclients::ethereum::v1::AccountUpdate,
     >,
-    /// seconds from unix epoch
-    #[prost(uint64, tag = "5")]
-    pub timestamp: u64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
