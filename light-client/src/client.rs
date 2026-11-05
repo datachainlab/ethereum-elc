@@ -588,6 +588,7 @@ mod tests {
             state_root_branch: execution_update.state_root_branch,
             block_number: execution_update.block_number,
             block_number_branch: execution_update.block_number_branch,
+            rlp: vec![],
             block_hash: H256::default(),
             block_hash_branch: vec![],
         };
@@ -600,7 +601,6 @@ mod tests {
                 account_proof: account_proof::get_proof(),
                 account_storage_root: account_proof::get_storage_root(),
             },
-            timestamp: new_timestamp(timestamp_secs).unwrap(),
         };
 
         let mut client_state = create_test_client_state_from_ctx(&fixture.ctx);
@@ -649,6 +649,7 @@ mod tests {
             state_root_branch: execution_update.state_root_branch,
             block_number: execution_update.block_number,
             block_number_branch: execution_update.block_number_branch,
+            rlp: vec![],
             block_hash: H256::default(),
             block_hash_branch: vec![],
         };
@@ -661,7 +662,6 @@ mod tests {
                 account_proof: account_proof::get_proof(),
                 account_storage_root: account_proof::get_storage_root(),
             },
-            timestamp: new_timestamp(timestamp_secs).unwrap(),
         };
 
         let mut client_state = create_test_client_state_from_ctx(&fixture.ctx);

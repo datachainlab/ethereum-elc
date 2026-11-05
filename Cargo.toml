@@ -8,3 +8,4 @@ exclude = [
     "proto-compiler",
     "tests/enclave",
 ]
+
