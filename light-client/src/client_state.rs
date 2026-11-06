@@ -29,7 +29,6 @@ use ethereum_light_client_verifier::context::{
     ChainConsensusVerificationContext, Fraction, LightClientContext,
 };
 use ethereum_light_client_verifier::execution::ExecutionVerifier;
-use ethereum_light_client_verifier::updates::ConsensusUpdate;
 use light_client::types::{Any, ClientId, Height, Time};
 use prost::Message;
 use serde::{Deserialize, Serialize};
@@ -182,6 +181,9 @@ impl<const SYNC_COMMITTEE_SIZE: usize> ClientState<SYNC_COMMITTEE_SIZE> {
     ) -> Result<(ClientState<SYNC_COMMITTEE_SIZE>, ConsensusState), Error> {
         let cc = self.build_context(now);
         header.validate()?;
+        // Derived before the fields are moved out of `header`. The value is only acted on
+        // after `validate_updates` below has bound the execution update to the consensus update.
+        let header_timestamp = header.timestamp(&cc)?;
 
         let trusted_sync_committee = header.trusted_sync_committee;
         let trusted_consensus_state = TrustedConsensusState::new(
@@ -201,12 +203,6 @@ impl<const SYNC_COMMITTEE_SIZE: usize> ClientState<SYNC_COMMITTEE_SIZE> {
                 &execution_update,
             )
             .map_err(Error::Verification)?;
-
-        // Derived only now: post-Gloas this reads the RLP execution header, which
-        // `validate_updates` has just bound to the consensus update.
-        let header_timestamp =
-            execution_update.timestamp(&cc, consensus_update.finalized_beacon_header().slot)?;
-        let header_timestamp = Time::from_unix_timestamp_nanos(header_timestamp)?;
 
         verify_account_storage(
             &self.execution_verifier,

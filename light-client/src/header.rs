@@ -84,8 +84,8 @@ impl<const SYNC_COMMITTEE_SIZE: usize> Header<SYNC_COMMITTEE_SIZE> {
     /// - Gloas: the timestamp of the bid's parent block, which is neither the finalized slot's
     ///   timestamp nor derivable from it, since slots may be skipped
     ///
-    /// Only call this once the execution update has been verified — the Gloas branch reads the
-    /// RLP header, which is bound to the consensus update by that verification.
+    /// The Gloas branch reads `execution_update.rlp`, which only `validate_updates` binds to
+    /// the consensus update. Do not act on the result before that check has passed.
     pub fn timestamp<C: ChainConsensusVerificationContext>(&self, ctx: &C) -> Result<Time, Error> {
         let nanos = self
             .execution_update
