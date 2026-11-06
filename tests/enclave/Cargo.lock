@@ -14,18 +14,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ahash"
-version = "0.8.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a15f179cd60c4584b8a8c596927aadc462e27f2ca70c04e0071964a73ba7a75"
-dependencies = [
- "cfg-if",
- "once_cell",
- "version_check",
- "zerocopy",
-]
-
-[[package]]
 name = "alloy-primitives"
 version = "0.8.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -126,7 +114,7 @@ checksum = "f02882884d3e1bc524fb12c79f107f6ad0e1cfd498c536ffb494301740995dfe"
 [[package]]
 name = "attestation-report"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -139,7 +127,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with",
- "sgx_types",
+ "sgx-types",
  "webpki",
 ]
 
@@ -169,12 +157,11 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "bincode"
-version = "2.0.1"
+version = "2.0.0-rc.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36eaf5d7b090263e8150820482d5d93cd964a81e4019913c972f4edcc6edb740"
+checksum = "f11ea1a0346b94ef188834a65c068a03aec181c94896d481d7a0a40d85b0ce95"
 dependencies = [
  "serde",
- "unty",
 ]
 
 [[package]]
@@ -220,7 +207,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "115e54d64eb62cdebad391c19efc9dce4981c690c85a33a12199d99bb9546fee"
 dependencies = [
  "borsh-derive",
- "hashbrown 0.13.2",
+ "hashbrown 0.12.3",
 ]
 
 [[package]]
@@ -308,7 +295,7 @@ dependencies = [
 [[package]]
 name = "commitments"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "alloy-sol-types",
  "crypto",
@@ -356,7 +343,7 @@ dependencies = [
 [[package]]
 name = "context"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "crypto",
  "lcp-types",
@@ -391,16 +378,16 @@ checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
 [[package]]
 name = "crypto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "flex-error",
  "hex",
  "libsecp256k1",
  "serde",
  "serde-big-array",
- "sgx_trts",
- "sgx_tseal",
- "sgx_types",
+ "sgx-trts",
+ "sgx-tseal",
+ "sgx-types",
  "tiny-keccak",
  "zeroize",
 ]
@@ -573,7 +560,7 @@ checksum = "d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555"
 [[package]]
 name = "ecall-commands"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "commitments",
  "crypto",
@@ -581,14 +568,14 @@ dependencies = [
  "lcp-types",
  "serde",
  "serde_with",
- "sgx_types",
+ "sgx-types",
  "store",
 ]
 
 [[package]]
 name = "ecall-handler"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "attestation-report",
  "context",
@@ -598,8 +585,8 @@ dependencies = [
  "flex-error",
  "lcp-types",
  "light-client",
- "sgx_tse",
- "sgx_types",
+ "sgx-tse",
+ "sgx-types",
  "store",
 ]
 
@@ -643,7 +630,7 @@ dependencies = [
 [[package]]
 name = "enclave-environment"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "host-api",
  "light-client",
@@ -653,7 +640,7 @@ dependencies = [
 [[package]]
 name = "enclave-runtime"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "bincode",
  "ecall-commands",
@@ -664,19 +651,19 @@ dependencies = [
  "host-api",
  "log",
  "once_cell",
- "sgx_alloc",
- "sgx_trts",
- "sgx_types",
+ "sgx-alloc",
+ "sgx-trts",
+ "sgx-types",
 ]
 
 [[package]]
 name = "enclave-utils"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "log",
- "sgx_trts",
- "sgx_types",
+ "sgx-trts",
+ "sgx-types",
 ]
 
 [[package]]
@@ -912,16 +899,7 @@ version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
 dependencies = [
- "ahash 0.7.8",
-]
-
-[[package]]
-name = "hashbrown"
-version = "0.13.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
-dependencies = [
- "ahash 0.8.12",
+ "ahash",
 ]
 
 [[package]]
@@ -969,12 +947,12 @@ dependencies = [
 [[package]]
 name = "host-api"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "bincode",
  "flex-error",
  "ocall-commands",
- "sgx_types",
+ "sgx-types",
  "store",
 ]
 
@@ -1127,7 +1105,7 @@ dependencies = [
 [[package]]
 name = "lcp-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "ibc-proto",
  "prost",
@@ -1137,7 +1115,7 @@ dependencies = [
 [[package]]
 name = "lcp-types"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "flex-error",
  "hex",
@@ -1147,7 +1125,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with",
- "sgx_types",
+ "sgx-types",
  "time",
 ]
 
@@ -1210,7 +1188,7 @@ dependencies = [
 [[package]]
 name = "light-client"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "bincode",
  "commitments",
@@ -1308,7 +1286,7 @@ dependencies = [
 [[package]]
 name = "ocall-commands"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "serde",
  "store",
@@ -1844,58 +1822,57 @@ dependencies = [
 ]
 
 [[package]]
-name = "sgx_alloc"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-alloc"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 
 [[package]]
-name = "sgx_libc"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-build-env"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
+
+[[package]]
+name = "sgx-tcrypto"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 dependencies = [
- "sgx_types",
+ "sgx-types",
 ]
 
 [[package]]
-name = "sgx_tcrypto"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-trts"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 dependencies = [
- "sgx_types",
+ "sgx-types",
 ]
 
 [[package]]
-name = "sgx_trts"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-tse"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 dependencies = [
- "sgx_libc",
- "sgx_types",
+ "sgx-types",
 ]
 
 [[package]]
-name = "sgx_tse"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-tseal"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 dependencies = [
- "sgx_types",
+ "sgx-tcrypto",
+ "sgx-trts",
+ "sgx-tse",
+ "sgx-types",
 ]
 
 [[package]]
-name = "sgx_tseal"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
+name = "sgx-types"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 dependencies = [
- "sgx_tcrypto",
- "sgx_trts",
- "sgx_tse",
- "sgx_types",
+ "sgx-build-env",
 ]
-
-[[package]]
-name = "sgx_types"
-version = "1.1.6"
-source = "git+https://github.com/apache/incubator-teaclave-sgx-sdk?rev=v1.1.6#c3d82372dff81e5bafb07f71bc8ad532d06b504e"
 
 [[package]]
 name = "sha2"
@@ -1987,7 +1964,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "store"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "flex-error",
  "log",
@@ -2105,7 +2082,7 @@ dependencies = [
 [[package]]
 name = "tendermint-lc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=v0.2.17#a6006913123c973d4b1e8b57020df103551f122e"
+source = "git+https://github.com/datachainlab/lcp?rev=5f754dc45dca35bf84c183775cc076e9258b7eac#5f754dc45dca35bf84c183775cc076e9258b7eac"
 dependencies = [
  "crypto",
  "flex-error",
@@ -2337,12 +2314,6 @@ name = "untrusted"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
-
-[[package]]
-name = "unty"
-version = "0.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d49784317cd0d1ee7ec5c716dd598ec5b4483ea832a2dced265471cc0f690ae"
 
 [[package]]
 name = "valuable"
