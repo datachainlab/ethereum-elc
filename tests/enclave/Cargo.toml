@@ -9,12 +9,12 @@ name = "proxy_enclave"
 crate-type = ["staticlib"]
 
 [dependencies]
-enclave-runtime = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.17" }
-tendermint-lc = { git = "https://github.com/datachainlab/lcp", rev = "v0.2.17", default-features = false }
+enclave-runtime = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191" }
+tendermint-lc = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false }
 ethereum-elc = { path = "../../light-client", default-features = false }
 
 [patch."crates-io"]
-getrandom = { git = "https://github.com/datachainlab/getrandom-sgx-lite" }
+getrandom = { git = "https://github.com/yoshidan/getrandom-sgx-lite", rev = "c7f140f59088ae24e60c3737188cdd1331aed93f" }
 # TODO these patches would be better as optional
 sha2-0108 = { git = "https://github.com/bluele/hashes", branch = "0.10.8-sha256-hwa-disabled", package = "sha2" }
 sha2-099 = { git = "https://github.com/bluele/hashes", branch = "0.9.9-sha256-hwa-disabled", package = "sha2" }

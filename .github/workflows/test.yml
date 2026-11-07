@@ -17,3 +17,17 @@ jobs:
       - run: make lint-tools
       - run: make lint
       - run: cargo test
+
+  enclave-build:
+    runs-on: ubuntu-22.04
+    env:
+      SGX_MODE: SW
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+      - run: sudo bash ./tests/lcp/.github/scripts/install_sgx_sdk.sh /opt/intel
+      - run: source /opt/intel/sgxsdk/environment && make -C tests bin/enclave.signed.so
