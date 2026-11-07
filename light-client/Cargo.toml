@@ -20,11 +20,11 @@ ethereum-light-client-proto = { git = "https://github.com/datachainlab/ethereum-
 ethereum-light-client-types = { git = "https://github.com/datachainlab/ethereum-light-client-types", rev = "v0.3.0", default-features = false }
 
 # LCP
-light-client = { git = "https://github.com/datachainlab/lcp", rev = "5f754dc45dca35bf84c183775cc076e9258b7eac", default-features = false, features = ["ibc"] }
+light-client = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false, features = ["ibc"] }
 
 [dev-dependencies]
-light-client = { git = "https://github.com/datachainlab/lcp", rev = "5f754dc45dca35bf84c183775cc076e9258b7eac", default-features = false, features = ["ibc", "std"] }
-store = { git = "https://github.com/datachainlab/lcp", rev = "5f754dc45dca35bf84c183775cc076e9258b7eac", default-features = false }
+light-client = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false, features = ["ibc", "std"] }
+store = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false }
 
 hex-literal = "0.4.1"
 ethereum-consensus = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.3.0", default-features = false, features = ["prover"] }
