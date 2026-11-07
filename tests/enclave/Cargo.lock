@@ -869,13 +869,10 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
-version = "0.2.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff2abc00be7fca6ebc474524697ae276ad847ad0a6b3faa4bcb027e9a4614ad0"
+version = "0.2.10"
+source = "git+https://github.com/yoshidan/getrandom-sgx-lite?rev=c7f140f59088ae24e60c3737188cdd1331aed93f#c7f140f59088ae24e60c3737188cdd1331aed93f"
 dependencies = [
- "cfg-if",
- "libc",
- "wasi",
+ "sgx-trts",
 ]
 
 [[package]]
@@ -2328,12 +2325,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
-name = "wasi"
-version = "0.11.1+wasi-snapshot-preview1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b"
-
-[[package]]
 name = "webpki"
 version = "0.22.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2501,8 +2492,3 @@ name = "zmij"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
-
-[[patch.unused]]
-name = "getrandom"
-version = "0.2.8"
-source = "git+https://github.com/datachainlab/getrandom-sgx-lite#a5fb7d9a15a3b404ad2a7cc21fb6c4612f0443de"
