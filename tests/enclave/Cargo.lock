@@ -114,7 +114,7 @@ checksum = "f02882884d3e1bc524fb12c79f107f6ad0e1cfd498c536ffb494301740995dfe"
 [[package]]
 name = "attestation-report"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -295,7 +295,7 @@ dependencies = [
 [[package]]
 name = "commitments"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "alloy-sol-types",
  "crypto",
@@ -304,7 +304,7 @@ dependencies = [
  "lcp-types",
  "prost",
  "serde",
- "sha2 0.10.8",
+ "sha2 0.10.9",
 ]
 
 [[package]]
@@ -343,7 +343,7 @@ dependencies = [
 [[package]]
 name = "context"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "crypto",
  "lcp-types",
@@ -378,7 +378,7 @@ checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
 [[package]]
 name = "crypto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "flex-error",
  "hex",
@@ -560,7 +560,7 @@ checksum = "d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555"
 [[package]]
 name = "ecall-commands"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "commitments",
  "crypto",
@@ -575,7 +575,7 @@ dependencies = [
 [[package]]
 name = "ecall-handler"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "attestation-report",
  "context",
@@ -624,13 +624,14 @@ version = "0.1.0"
 dependencies = [
  "enclave-runtime",
  "ethereum-elc",
+ "sgx-build",
  "tendermint-lc",
 ]
 
 [[package]]
 name = "enclave-environment"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "host-api",
  "light-client",
@@ -640,7 +641,7 @@ dependencies = [
 [[package]]
 name = "enclave-runtime"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "bincode",
  "ecall-commands",
@@ -651,7 +652,7 @@ dependencies = [
  "host-api",
  "log",
  "once_cell",
- "sgx-alloc",
+ "sgx-ert",
  "sgx-trts",
  "sgx-types",
 ]
@@ -659,7 +660,7 @@ dependencies = [
 [[package]]
 name = "enclave-utils"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "log",
  "sgx-trts",
@@ -691,7 +692,7 @@ dependencies = [
  "milagro_bls",
  "primitive-types",
  "serde",
- "sha2 0.10.8",
+ "sha2 0.10.9",
  "ssz-rs",
  "ssz-rs-derive",
 ]
@@ -709,7 +710,7 @@ dependencies = [
  "light-client",
  "prost",
  "serde",
- "thiserror 2.0.18",
+ "thiserror",
  "time",
 ]
 
@@ -743,7 +744,7 @@ dependencies = [
  "rlp",
  "serde",
  "ssz-rs",
- "thiserror 2.0.18",
+ "thiserror",
  "tiny-keccak",
 ]
 
@@ -869,10 +870,13 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
-version = "0.2.10"
-source = "git+https://github.com/yoshidan/getrandom-sgx-lite?rev=c7f140f59088ae24e60c3737188cdd1331aed93f#c7f140f59088ae24e60c3737188cdd1331aed93f"
+version = "0.2.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff2abc00be7fca6ebc474524697ae276ad847ad0a6b3faa4bcb027e9a4614ad0"
 dependencies = [
- "sgx-trts",
+ "cfg-if",
+ "libc",
+ "wasi",
 ]
 
 [[package]]
@@ -944,7 +948,7 @@ dependencies = [
 [[package]]
 name = "host-api"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "bincode",
  "flex-error",
@@ -972,7 +976,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "sha2 0.10.8",
+ "sha2 0.10.9",
  "subtle-encoding",
  "tendermint",
  "tendermint-light-client-verifier",
@@ -1011,7 +1015,7 @@ dependencies = [
  "hex",
  "prost",
  "ripemd",
- "sha2 0.10.8",
+ "sha2 0.10.9",
  "sha3",
 ]
 
@@ -1102,7 +1106,7 @@ dependencies = [
 [[package]]
 name = "lcp-proto"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "ibc-proto",
  "prost",
@@ -1112,7 +1116,7 @@ dependencies = [
 [[package]]
 name = "lcp-types"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "flex-error",
  "hex",
@@ -1185,7 +1189,7 @@ dependencies = [
 [[package]]
 name = "light-client"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "bincode",
  "commitments",
@@ -1283,7 +1287,7 @@ dependencies = [
 [[package]]
 name = "ocall-commands"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "serde",
  "store",
@@ -1824,9 +1828,27 @@ version = "0.1.0"
 source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
 
 [[package]]
+name = "sgx-build"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
+dependencies = [
+ "cc",
+ "sgx-build-env",
+]
+
+[[package]]
 name = "sgx-build-env"
 version = "0.1.0"
 source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
+
+[[package]]
+name = "sgx-ert"
+version = "0.1.0"
+source = "git+https://github.com/datachainlab/sgx-sdk-rs?tag=v0.1.0#1e42009f6ae6f5964c1728fb142de7318d50a647"
+dependencies = [
+ "sgx-alloc",
+ "sgx-types",
+]
 
 [[package]]
 name = "sgx-tcrypto"
@@ -1874,7 +1896,8 @@ dependencies = [
 [[package]]
 name = "sha2"
 version = "0.9.9"
-source = "git+https://github.com/bluele/hashes?branch=0.9.9-sha256-hwa-disabled#2119233e1f4a24e1bd3d815055d452951c5881ac"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d58a1e1bf39749807d89cf2d98ac2dfa0ff1cb3faa38fbb64dd88ac8013d800"
 dependencies = [
  "block-buffer 0.9.0",
  "cfg-if",
@@ -1885,8 +1908,9 @@ dependencies = [
 
 [[package]]
 name = "sha2"
-version = "0.10.8"
-source = "git+https://github.com/bluele/hashes?branch=0.10.8-sha256-hwa-disabled#64b5261e4e44d0e990564f959e982279a60187db"
+version = "0.10.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -1930,7 +1954,7 @@ checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 [[package]]
 name = "ssz-rs"
 version = "0.8.0"
-source = "git+https://github.com/bluele/ssz_rs?branch=serde-no-std#6f3d68582677e122cfdc44189ade5c96ea82d52e"
+source = "git+https://github.com/yoshidan/ssz_rs?branch=remove-unused-thiserror#ed9cb116338c05b5dbec01f0136ca544ac3c819b"
 dependencies = [
  "bitvec",
  "hex",
@@ -1939,13 +1963,12 @@ dependencies = [
  "serde",
  "sha2 0.9.9",
  "ssz-rs-derive",
- "thiserror 1.0.69",
 ]
 
 [[package]]
 name = "ssz-rs-derive"
 version = "0.8.0"
-source = "git+https://github.com/bluele/ssz_rs?branch=serde-no-std#6f3d68582677e122cfdc44189ade5c96ea82d52e"
+source = "git+https://github.com/yoshidan/ssz_rs?branch=remove-unused-thiserror#ed9cb116338c05b5dbec01f0136ca544ac3c819b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1961,7 +1984,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "store"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "flex-error",
  "log",
@@ -2067,7 +2090,7 @@ dependencies = [
  "serde_bytes",
  "serde_json",
  "serde_repr",
- "sha2 0.10.8",
+ "sha2 0.10.9",
  "signature",
  "subtle",
  "subtle-encoding",
@@ -2079,7 +2102,7 @@ dependencies = [
 [[package]]
 name = "tendermint-lc"
 version = "0.1.0"
-source = "git+https://github.com/datachainlab/lcp?rev=fcb76ada2aad3eaffdbcd2b482b574eac9950191#fcb76ada2aad3eaffdbcd2b482b574eac9950191"
+source = "git+https://github.com/yoshidan/lcp?rev=4c911e010261bb2f6f10c75b82e2c43412421a5e#4c911e010261bb2f6f10c75b82e2c43412421a5e"
 dependencies = [
  "crypto",
  "flex-error",
@@ -2124,31 +2147,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.69"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6aaf5339b578ea85b50e080feb250a3e8ae8cfcdff9a461c9ec2904bc923f52"
-dependencies = [
- "thiserror-impl 1.0.69",
-]
-
-[[package]]
-name = "thiserror"
 version = "2.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4288b5bcbc7920c07a1149a35cf9590a2aa808e0bc1eafaade0b80947865fbc4"
 dependencies = [
- "thiserror-impl 2.0.18",
-]
-
-[[package]]
-name = "thiserror-impl"
-version = "1.0.69"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.118",
+ "thiserror-impl",
 ]
 
 [[package]]
@@ -2323,6 +2326,12 @@ name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
+name = "wasi"
+version = "0.11.1+wasi-snapshot-preview1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b"
 
 [[package]]
 name = "webpki"

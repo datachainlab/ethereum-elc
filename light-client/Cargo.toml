@@ -20,11 +20,13 @@ ethereum-light-client-proto = { git = "https://github.com/datachainlab/ethereum-
 ethereum-light-client-types = { git = "https://github.com/datachainlab/ethereum-light-client-types", rev = "v0.3.0", default-features = false }
 
 # LCP
-light-client = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false, features = ["ibc"] }
+# TEMPORARY: datachainlab/lcp#150 (cargo sgx build); the commit is only on the
+# fork until it merges.
+light-client = { git = "https://github.com/yoshidan/lcp", rev = "4c911e010261bb2f6f10c75b82e2c43412421a5e", default-features = false, features = ["ibc"] }
 
 [dev-dependencies]
-light-client = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false, features = ["ibc", "std"] }
-store = { git = "https://github.com/datachainlab/lcp", rev = "fcb76ada2aad3eaffdbcd2b482b574eac9950191", default-features = false }
+light-client = { git = "https://github.com/yoshidan/lcp", rev = "4c911e010261bb2f6f10c75b82e2c43412421a5e", default-features = false, features = ["ibc", "std"] }
+store = { git = "https://github.com/yoshidan/lcp", rev = "4c911e010261bb2f6f10c75b82e2c43412421a5e", default-features = false }
 
 hex-literal = "0.4.1"
 ethereum-consensus = { git = "https://github.com/datachainlab/ethereum-light-client-rs", rev = "v0.3.0", default-features = false, features = ["prover"] }
