@@ -1,3 +1,5 @@
 [submodule "tests/lcp"]
 	path = tests/lcp
-	url = https://github.com/datachainlab/lcp
+	# TEMPORARY: datachainlab/lcp#150 is not merged yet, so the commit this
+	# points at only exists on the fork. Revert once #150 lands.
+	url = https://github.com/yoshidan/lcp
