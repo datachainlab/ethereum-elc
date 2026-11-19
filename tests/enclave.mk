@@ -70,10 +70,6 @@ endif
 CUSTOM_LIBRARY_PATH := ./lib
 CUSTOM_BIN_PATH := ./bin
 
-######## EDL Settings ########
-
-Enclave_EDL_Files := enclave/Enclave_t.c enclave/Enclave_t.h app/Enclave_u.c app/Enclave_u.h
-
 ######## Enclave Settings ########
 
 ifneq ($(SGX_MODE), HW)
@@ -86,45 +82,26 @@ endif
 Crypto_Library_Name := sgx_tcrypto
 ProtectedFs_Library_Name := sgx_tprotected_fs
 
-RustEnclave_C_Files := $(wildcard ./enclave/*.c)
-RustEnclave_C_Objects := $(RustEnclave_C_Files:.c=.o)
-RustEnclave_Include_Paths := -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/stlport -I$(SGX_SDK)/include/epid -I ./enclave -I./include
+# avx2 and the link flags that used to live here are in the target spec now. The
+# spec comes from the lcp submodule, so this enclave is built against exactly the
+# one lcp's own enclave uses.
+Enclave_Target_Spec := $(CURDIR)/lcp/enclave/x86_64-unknown-unknown-sgx.json
 
-RustEnclave_Link_Libs := -L$(CUSTOM_LIBRARY_PATH) -lenclave
-RustEnclave_Compile_Flags := $(SGX_COMMON_CFLAGS) $(ENCLAVE_CFLAGS) $(RustEnclave_Include_Paths)
-RustEnclave_Link_Flags := -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \
-	-Wl,--whole-archive -l$(Trts_Library_Name) -l${ProtectedFs_Library_Name} -Wl,--no-whole-archive \
-	-Wl,--start-group -lsgx_tcxx -lsgx_tstdc -l$(Service_Library_Name) -l$(Crypto_Library_Name) $(RustEnclave_Link_Libs) -Wl,--end-group \
-	-Wl,--version-script=enclave/Enclave.lds \
-	$(ENCLAVE_LDFLAGS)
-RUSTFLAGS :="-C target-feature=+avx2"
-
-RustEnclave_Name := enclave/enclave.so
+RustEnclave_Name := enclave/target/x86_64-unknown-unknown-sgx/$(OUTPUT_PATH)/enclave.so
 Signed_RustEnclave_Name := bin/enclave.signed.so
-
-######## EDL Objects ########
-
-$(Enclave_EDL_Files): $(SGX_EDGER8R) enclave/Enclave.edl
-	$(SGX_EDGER8R) --trusted enclave/Enclave.edl --search-path $(SGX_SDK)/include --trusted-dir enclave
-	@echo "GEN  =>  $(Enclave_EDL_Files)"
 
 ######## Enclave Objects ########
 
-enclave/Enclave_t.o: $(Enclave_EDL_Files)
-	@$(CC) $(RustEnclave_Compile_Flags) -c enclave/Enclave_t.c -o $@
-	@echo "CC   <=  $<"
-
-$(RustEnclave_Name): enclave enclave/Enclave_t.o
-	@$(CXX) enclave/Enclave_t.o -o $@ $(RustEnclave_Link_Flags)
-	@echo "LINK =>  $@"
-
-$(Signed_RustEnclave_Name): $(RustEnclave_Name)
+$(Signed_RustEnclave_Name): enclave
 	mkdir -p bin
 	@$(SGX_ENCLAVE_SIGNER) sign -key enclave/Enclave_private.pem -enclave $(RustEnclave_Name) -out $@ -config enclave/Enclave.config.xml
 	@echo "SIGN =>  $@"
 
+# cargo sgx build runs edger8r for the trusted half through enclave/build.rs, so
+# there is no EDL rule here. build-std goes through the environment, so the
+# enclave needs no .cargo/config.toml of its own.
 .PHONY: enclave
 enclave:
-	@cd enclave && RUSTFLAGS=$(RUSTFLAGS) cargo build $(CARGO_TARGET) $(CARGO_FEATURES)
-	@mkdir -p ./lib
-	@cp enclave/target/$(OUTPUT_PATH)/libproxy_enclave.a ./lib/libenclave.a
+	@cd enclave && SGX_SDK=$(SGX_SDK) SGX_MODE=$(SGX_MODE) \
+		CARGO_UNSTABLE_BUILD_STD=core,alloc \
+		cargo sgx build --target $(Enclave_Target_Spec) $(CARGO_TARGET)
